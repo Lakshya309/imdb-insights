@@ -21,9 +21,9 @@ export default function ParallaxHero() {
     })
 
     // Scroll-based depth layers
-    const depth1 = useTransform(scrollYProgress, [0, 1], [0, -150])
-    const depth2 = useTransform(scrollYProgress, [0, 1], [0, -300])
-    const depth3 = useTransform(scrollYProgress, [0, 1], [0, -450])
+    const depth1 = useTransform(scrollYProgress, [0, 1], [0, -120])
+    const depth2 = useTransform(scrollYProgress, [0, 1], [0, -240])
+    const depth3 = useTransform(scrollYProgress, [0, 1], [0, -360])
 
     // Mouse 3D floating effect
     const mouseX = useMotionValue(0)
@@ -33,12 +33,12 @@ export default function ParallaxHero() {
     const smoothY = useSpring(mouseY, { stiffness: 60, damping: 20 })
 
     const posterPositions = [
-        { top: "8%", left: "5%" },
-        { top: "18%", right: "8%" },
+        { top: "10%", left: "5%" },
+        { top: "20%", right: "5%" },
         { bottom: "15%", left: "5%" },
         { top: "30%", left: "25%" },
-        { bottom: "15%", right: "18%" },
-        { top: "12%", right: "32%" },
+        { bottom: "10%", right: "10%" },
+        { top: "15%", right: "25%" },
     ]
 
     useEffect(() => {
@@ -49,7 +49,6 @@ export default function ParallaxHero() {
 
     const handleMouseMove = (e) => {
         const { innerWidth, innerHeight } = window
-
         mouseX.set((e.clientX - innerWidth / 2) / 40)
         mouseY.set((e.clientY - innerHeight / 2) / 40)
     }
@@ -64,7 +63,6 @@ export default function ParallaxHero() {
             <div className="absolute inset-0 pointer-events-none">
                 {movies
                     .filter((movie) => movie?.primaryImage?.url)
-
                     .map((movie, index) => {
                         const depths = [depth1, depth2, depth3]
                         const depth = depths[index % 3]
@@ -83,7 +81,13 @@ export default function ParallaxHero() {
                                     rotateY: smoothX,
                                     rotateX: smoothY,
                                 }}
-                                className="absolute w-44 md:w-52 rounded-2xl shadow-2xl will-change-transform"
+                                className="
+                                    absolute
+                                    w-28 sm:w-36 md:w-44 lg:w-52
+                                    rounded-2xl shadow-2xl
+                                    will-change-transform
+                                    max-w-[30vw] min-w-[20vw]
+                                "
                             />
                         )
                     })}
@@ -92,12 +96,12 @@ export default function ParallaxHero() {
             {/* Sticky Center Content */}
             <div className="sticky top-0 h-screen flex items-center justify-center">
                 <motion.div
-                    className="relative z-10 text-center text-white"
+                    className="relative z-10 text-center text-white px-4 sm:px-6 md:px-0"
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
                 >
-                    <h1 className="text-6xl mix-blend-screen md:text-8xl font-light tracking-wide">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-light tracking-wide">
                         <p className="text-white italic">Explore</p>
                         <p className="text-white font-bold">Hidden</p>
                         <p className="text-white italic">Gems.</p>
