@@ -1,6 +1,7 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Playfair_Display, Inter } from "next/font/google";
+import Navbar from "@/components/layout/Navbar";
+
 
 export const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${playfair.variable} ${inter.variable}`}
       >
+        <Navbar />
         {children}
       </body>
     </html>

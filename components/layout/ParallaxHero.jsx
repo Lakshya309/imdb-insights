@@ -97,10 +97,10 @@ export default function ParallaxHero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
                 >
-                    <h1 className="text-6xl mix-blend-difference md:text-8xl font-light italic tracking-wide">
-                        Explore<br></br>
-                        Hidden<br></br>
-                        Gems.<br></br>
+                    <h1 className="text-6xl mix-blend-screen md:text-8xl font-light tracking-wide">
+                        <p className="text-white italic">Explore</p>
+                        <p className="text-white font-bold">Hidden</p>
+                        <p className="text-white italic">Gems.</p>
                     </h1>
 
                     <div className="mt-8">
