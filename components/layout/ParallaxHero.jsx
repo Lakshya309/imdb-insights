@@ -35,8 +35,8 @@ export default function ParallaxHero() {
     const posterPositions = [
         { top: "8%", left: "5%" },
         { top: "18%", right: "8%" },
-        { bottom: "15%", left: "15%" },
-        { top: "30%", left: "30%" },
+        { bottom: "15%", left: "5%" },
+        { top: "30%", left: "25%" },
         { bottom: "15%", right: "18%" },
         { top: "12%", right: "32%" },
     ]
@@ -64,6 +64,7 @@ export default function ParallaxHero() {
             <div className="absolute inset-0 pointer-events-none">
                 {movies
                     .filter((movie) => movie?.primaryImage?.url)
+
                     .map((movie, index) => {
                         const depths = [depth1, depth2, depth3]
                         const depth = depths[index % 3]
@@ -96,8 +97,10 @@ export default function ParallaxHero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
                 >
-                    <h1 className="text-7xl md:text-8xl font-light italic tracking-wide">
-                        cult.
+                    <h1 className="text-6xl mix-blend-difference md:text-8xl font-light italic tracking-wide">
+                        Explore<br></br>
+                        Hidden<br></br>
+                        Gems.<br></br>
                     </h1>
 
                     <div className="mt-8">

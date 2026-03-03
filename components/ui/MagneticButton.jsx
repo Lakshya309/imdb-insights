@@ -33,7 +33,7 @@ export default function MagneticButton() {
                     ?.scrollIntoView({ behavior: "smooth" })
             }
         >
-            Explore
+            Search
         </motion.button>
     )
 }
