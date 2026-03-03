@@ -1,8 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
+import Badge from "./ui/Badge";
 
 export default function MovieCard({ data }) {
-  const movie = data?.title;
+  const movie = data?.title || data; // Handle both search result and single movie data structures
 
   if (!movie) return null;
 
@@ -13,98 +14,86 @@ export default function MovieCard({ data }) {
     return `${hours}h ${minutes}m`;
   };
 
+  const posterUrl = movie.primaryImage?.url || movie.image;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl p-8 mt-10"
+      transition={{ duration: 0.6 }}
+      className="w-full bg-glass shadow-glass rounded-2xl overflow-hidden hover:scale-[1.02] transition-transform duration-300"
     >
-      <div className="flex flex-col md:flex-row gap-10">
-        {/* Poster */}
-        <img
-          src={movie.primaryImage?.url || data.image}
-          alt={movie.primaryTitle}
-          className="w-72 rounded-xl shadow-lg"
-        />
+      <div className="flex flex-col md:flex-row h-full">
+        {/* Poster Wrapper */}
+        <div className="relative w-full md:w-1/3 lg:w-1/4 shrink-0 overflow-hidden group">
+          <img
+            src={posterUrl}
+            alt={movie.primaryTitle}
+            className="w-full h-full object-cover aspect-[2/3] group-hover:scale-110 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:hidden" />
+        </div>
 
-        {/* Content */}
-        <div className="flex-1">
-          {/* Title */}
-          <h2 className="text-4xl font-bold">
-            {movie.primaryTitle}
-            <span className="text-gray-500 ml-2">
-              ({movie.startYear})
-            </span>
-          </h2>
+        {/* Content Wrapper */}
+        <div className="flex-1 p-6 md:p-8 flex flex-col justify-between overflow-hidden">
+          <div>
+            <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight break-words">
+                {movie.primaryTitle}
+                <span className="text-gray-500 font-normal ml-3">
+                  ({movie.startYear})
+                </span>
+              </h2>
+              {movie.rating?.aggregateRating && (
+                <div className="flex items-center bg-yellow-500/10 border border-yellow-500/20 px-3 py-1 rounded-full shrink-0">
+                  <span className="text-yellow-400 mr-2 font-bold">⭐ {movie.rating.aggregateRating}</span>
+                  <span className="text-xs text-yellow-400/60 font-medium">/ 10</span>
+                </div>
+              )}
+            </div>
 
-          {/* Ratings */}
-          <div className="flex gap-6 mt-4 text-lg">
-            <p>
-              ⭐ {movie.rating?.aggregateRating || "N/A"} / 10
-              <span className="text-sm text-gray-500 ml-1">
-                ({movie.rating?.voteCount?.toLocaleString()} votes)
+            {/* Meta Info */}
+            <div className="flex flex-wrap gap-2 mb-6 text-sm text-gray-400 font-medium">
+              <span className="bg-white/5 py-1 px-3 rounded-md border border-white/10 uppercase tracking-widest text-xs">
+                {formatRuntime(movie.runtimeSeconds)}
               </span>
-            </p>
+              {movie.genres?.map((genre) => (
+                <Badge key={genre} color="primary">{genre}</Badge>
+              ))}
+            </div>
 
-            {movie.metacritic && (
-              <p className="text-green-600 font-semibold">
-                Metacritic: {movie.metacritic.score}
+            {/* Plot */}
+            {movie.plot && (
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed line-clamp-4 md:line-clamp-6 lg:line-clamp-none mb-6 italic border-l-2 border-primary/30 pl-4 bg-white/5 py-3 rounded-r-lg">
+                "{movie.plot}"
               </p>
             )}
+
+            {/* Credits Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-6">
+              {movie.directors?.length > 0 && (
+                <div>
+                  <h4 className="text-primary uppercase tracking-widest text-[10px] font-bold mb-1">Director</h4>
+                  <p className="text-gray-300 truncate">{movie.directors.map(d => d.displayName).join(", ")}</p>
+                </div>
+              )}
+              {movie.stars?.length > 0 && (
+                <div>
+                  <h4 className="text-accent uppercase tracking-widest text-[10px] font-bold mb-1">Stars</h4>
+                  <p className="text-gray-300 truncate">{movie.stars.map(s => s.displayName).join(", ")}</p>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Runtime + Genres */}
-          <div className="mt-4 text-gray-700">
-            <p>Runtime: {formatRuntime(movie.runtimeSeconds)}</p>
-            <p>Genres: {movie.genres?.join(", ")}</p>
-          </div>
-
-          {/* Plot */}
-          <p className="mt-6 text-gray-800 leading-relaxed">
-            {movie.plot}
-          </p>
-
-          {/* Directors */}
-          {movie.directors?.length > 0 && (
-            <div className="mt-6">
-              <h3 className="font-semibold">Director(s):</h3>
-              <p>
-                {movie.directors.map((d) => d.displayName).join(", ")}
-              </p>
-            </div>
-          )}
-
-          {/* Writers */}
-          {movie.writers?.length > 0 && (
-            <div className="mt-4">
-              <h3 className="font-semibold">Writer(s):</h3>
-              <p>
-                {movie.writers.map((w) => w.displayName).join(", ")}
-              </p>
-            </div>
-          )}
-
-          {/* Stars */}
-          {movie.stars?.length > 0 && (
-            <div className="mt-4">
-              <h3 className="font-semibold">Stars:</h3>
-              <p>
-                {movie.stars.map((s) => s.displayName).join(", ")}
-              </p>
-            </div>
-          )}
-
-          {/* Country + Language */}
-          <div className="mt-6 text-sm text-gray-600">
-            <p>
-              Country:{" "}
-              {movie.originCountries?.map((c) => c.name).join(", ")}
-            </p>
-            <p>
-              Language:{" "}
-              {movie.spokenLanguages?.map((l) => l.name).join(", ")}
-            </p>
+          {/* Footer Info */}
+          <div className="mt-auto pt-6 border-t border-white/5 flex flex-wrap justify-between items-center gap-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            {movie.originCountries && (
+              <span>Country: {movie.originCountries.map(c => c.name).join(", ")}</span>
+            )}
+            {movie.spokenLanguages && (
+              <span>Language: {movie.spokenLanguages.map(l => l.name).join(", ")}</span>
+            )}
           </div>
         </div>
       </div>
